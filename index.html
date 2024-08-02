@@ -56,7 +56,9 @@
 
     // Function to create parametric geometry and color it
     function createParametricGeometry(fun) {
-        const geometry = new THREE.ParametricBufferGeometry(fun, 100, 100);
+        const slices = 100;
+        const stacks = 100;
+        const geometry = new THREE.ParametricBufferGeometry(fun, slices, stacks);
         const colors = new Float32Array(geometry.attributes.position.count * 3);
 
         for (let i = 0; i < geometry.attributes.position.count; i++) {

@@ -44,8 +44,44 @@
         const gridHelper = new THREE.GridHelper(10, 10);
         scene.add(gridHelper);
 
-        const axesHelper = new THREE.AxesHelper(1.5);
-        scene.add(axesHelper);
+        // Custom Axis Helper
+        const axisLength = 1.5;
+        const axisHelper = new THREE.Group();
+
+        const createArrow = (color, dir) => {
+            const material = new THREE.MeshBasicMaterial({ color: color });
+            const coneGeometry = new THREE.ConeGeometry(0.05, 0.2, 16);
+            const cylinderGeometry = new THREE.CylinderGeometry(0.02, 0.02, axisLength, 16);
+            const arrow = new THREE.Mesh(coneGeometry, material);
+            const line = new THREE.Mesh(cylinderGeometry, material);
+
+            line.position.y = axisLength / 2;
+            arrow.position.y = axisLength;
+            arrow.rotation.z = Math.PI / 2;
+            
+            if (dir === 'x') {
+                arrow.rotation.y = -Math.PI / 2;
+                line.rotation.z = -Math.PI / 2;
+            } else if (dir === 'z') {
+                arrow.rotation.x = Math.PI / 2;
+                line.rotation.x = Math.PI / 2;
+            }
+
+            const arrowGroup = new THREE.Group();
+            arrowGroup.add(line);
+            arrowGroup.add(arrow);
+            return arrowGroup;
+        };
+
+        const xArrow = createArrow(0xff0000, 'x');
+        const yArrow = createArrow(0x00ff00, 'y');
+        const zArrow = createArrow(0x0000ff, 'z');
+
+        axisHelper.add(xArrow);
+        axisHelper.add(yArrow);
+        axisHelper.add(zArrow);
+
+        scene.add(axisHelper);
 
         const ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
@@ -90,7 +126,6 @@
         const x = (u - 0.5) * 2;
         const y = (v - 0.5) * 2;
         const z = x * x - y * y;
-        // Adjust position and orientation to match the provided image
         target.set(x, y, z);
     }
 

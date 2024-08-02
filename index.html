@@ -17,49 +17,46 @@
 
     // Create the camera
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
+    camera.position.set(3, 3, 5);
 
     // Create the renderer
-    var renderer = new THREE.WebGLRenderer();
+    var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+
+    // Add grid helper
+    var gridHelper = new THREE.GridHelper(10, 10);
+    scene.add(gridHelper);
 
     // Add axis helper
     var axesHelper = new THREE.AxesHelper(5);
     scene.add(axesHelper);
 
-    // Create the plane
-    var planeGeometry = new THREE.PlaneGeometry(2, 2);
-    var planeMaterial = new THREE.MeshBasicMaterial({ color: 0xAAAAAA, side: THREE.DoubleSide, wireframe: true });
-    var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.rotation.x = -Math.PI / 2;
-    scene.add(plane);
-
-    // Generate vertices
+    // Generate vertices and colors
     function generateVertices() {
         var vertices = [];
+        var colors = [];
         for (var x = -1; x <= 1; x += 0.1) {
             for (var y = -1; y <= 1; y += 0.1) {
-                var z = x * x + y * y; // Example function: z = x^2 + y^2
-                vertices.push(new THREE.Vector3(x, y, z));
+                var z = Math.pow(x, 3) - Math.pow(y, 3); // Example function
+                vertices.push(x, y, z);
+                colors.push((x + 1) / 2, (y + 1) / 2, (z + 1) / 2);
             }
         }
-        return vertices;
+        return { vertices: vertices, colors: colors };
     }
 
     // Create the geometry and mesh
     function createMesh() {
-        var vertices = generateVertices();
-        var geometry = new THREE.Geometry();
-        geometry.vertices = vertices;
-        for (var i = 0; i < vertices.length - 1; i++) {
-            if ((i + 1) % 21 !== 0) {
-                geometry.faces.push(new THREE.Face3(i, i + 1, i + 21));
-                geometry.faces.push(new THREE.Face3(i + 1, i + 22, i + 21));
-            }
-        }
-        geometry.computeFaceNormals();
-        var material = new THREE.MeshBasicMaterial({ color: 0x00FF00, wireframe: true });
+        var data = generateVertices();
+        var geometry = new THREE.BufferGeometry();
+        var vertices = new Float32Array(data.vertices);
+        var colors = new Float32Array(data.colors);
+        
+        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        var material = new THREE.MeshBasicMaterial({ vertexColors: true, wireframe: true });
         var mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
     }

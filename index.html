@@ -43,6 +43,36 @@
     let scene, camera, renderer, controls, mesh;
     let axisScene, axisCamera, axisRenderer;
 
+    // Function to create an arrow
+    const createArrow = (color, direction) => {
+        const material = new THREE.MeshBasicMaterial({ color: color });
+        const coneGeometry = new THREE.ConeGeometry(0.05, 0.2, 16);
+        const cylinderGeometry = new THREE.CylinderGeometry(0.02, 0.02, 1, 16);
+
+        const arrow = new THREE.Mesh(coneGeometry, material);
+        const line = new THREE.Mesh(cylinderGeometry, material);
+
+        line.position.y = 0.5;
+        arrow.position.y = 1;
+
+        const arrowGroup = new THREE.Group();
+        arrowGroup.add(line);
+        arrowGroup.add(arrow);
+
+        switch (direction) {
+            case 'x':
+                arrowGroup.rotation.z = -Math.PI / 2;
+                break;
+            case 'z':
+                arrowGroup.rotation.x = Math.PI / 2;
+                break;
+            default:
+                break;
+        }
+
+        return arrowGroup;
+    };
+
     // Initialize the main scene
     function init() {
         const WIDTH = window.innerWidth;
@@ -65,36 +95,6 @@
 
         const gridHelper = new THREE.GridHelper(10, 10);
         scene.add(gridHelper);
-
-        // Custom Axis Helper
-        const createArrow = (color, direction) => {
-            const material = new THREE.MeshBasicMaterial({ color: color });
-            const coneGeometry = new THREE.ConeGeometry(0.05, 0.2, 16);
-            const cylinderGeometry = new THREE.CylinderGeometry(0.02, 0.02, 1, 16);
-
-            const arrow = new THREE.Mesh(coneGeometry, material);
-            const line = new THREE.Mesh(cylinderGeometry, material);
-
-            line.position.y = 0.5;
-            arrow.position.y = 1;
-
-            const arrowGroup = new THREE.Group();
-            arrowGroup.add(line);
-            arrowGroup.add(arrow);
-
-            switch (direction) {
-                case 'x':
-                    arrowGroup.rotation.z = -Math.PI / 2;
-                    break;
-                case 'z':
-                    arrowGroup.rotation.x = Math.PI / 2;
-                    break;
-                default:
-                    break;
-            }
-
-            return arrowGroup;
-        };
 
         const xArrow = createArrow(0xff0000, 'x'); // Red for X-axis
         const yArrow = createArrow(0x00ff00, 'y'); // Green for Y-axis

@@ -183,6 +183,7 @@
         createParametricGeometry(fun);
         if (fun === hyperbolicParaboloidFunction) {
             mesh.rotation.x = Math.PI / 2; // Rotate the hyperbolic paraboloid 90 degrees around the X-axis
+            mesh.scale.set(1.4, 1.4, 1.4); // Scale the hyperbolic paraboloid by 40%
         }
     }
 

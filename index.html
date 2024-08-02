@@ -20,9 +20,9 @@
 <div id="container"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script type="module">
+    import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
 
-<script type="text/javascript">
     // Set the scene size
     var WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
 
@@ -41,7 +41,7 @@
     camera.position.set(0, 10, 20);
     scene.add(camera);
 
-    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    var controls = new OrbitControls(camera, renderer.domElement);
     controls.target.set(0, 0, 0);
     controls.update();
 

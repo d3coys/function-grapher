@@ -12,9 +12,8 @@
 <body>
 <div id="container"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script type="module">
-    import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
 
+<script>
     // Set the scene size
     const WIDTH = window.innerWidth;
     const HEIGHT = window.innerHeight;
@@ -33,11 +32,6 @@
     camera.position.set(2, 2, 2);
     scene.add(camera);
 
-    // Add OrbitControls to the scene
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.target.set(0, 0, 0);
-    controls.update();
-
     // Add a grid helper to the scene
     const gridHelper = new THREE.GridHelper(10, 10);
     scene.add(gridHelper);
@@ -49,42 +43,32 @@
     // Function to generate vertices for a 3D function plot
     function generateVertices() {
         const vertices = [];
-        const colors = [];
         for (let x = -1; x <= 1; x += 0.1) {
             for (let y = -1; y <= 1; y += 0.1) {
                 const z = Math.pow(x, 3) - Math.pow(y, 3); // Example function: z = x^3 - y^3
                 vertices.push(x, y, z);
-                colors.push((x + 1) / 2, (y + 1) / 2, (z + 1) / 2);
             }
         }
-        return { vertices: vertices, colors: colors };
+        return vertices;
     }
 
     // Function to create a mesh from vertices
     function createMesh() {
-        const data = generateVertices();
+        const vertices = generateVertices();
         const geometry = new THREE.BufferGeometry();
-        const vertices = new Float32Array(data.vertices);
-        const colors = new Float32Array(data.colors);
+        const verticesFloat32 = new Float32Array(vertices);
+        geometry.setAttribute('position', new THREE.BufferAttribute(verticesFloat32, 3));
 
-        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-        const material = new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide });
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
         const mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
     }
 
     createMesh();
 
-    // Add an ambient light to the scene
-    const ambientLight = new THREE.AmbientLight(0x404040); // Soft white light
-    scene.add(ambientLight);
-
     // Animation loop to render the scene
     function animate() {
         requestAnimationFrame(animate);
-        controls.update();
         renderer.render(scene, camera);
     }
 

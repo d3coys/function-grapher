@@ -45,34 +45,38 @@
         scene.add(gridHelper);
 
         // Custom Axis Helper
-        const axisLength = 1.5;
-        const createArrow = (color, dir) => {
+        const createArrow = (color, direction) => {
             const material = new THREE.MeshBasicMaterial({ color: color });
             const coneGeometry = new THREE.ConeGeometry(0.05, 0.2, 16);
-            const cylinderGeometry = new THREE.CylinderGeometry(0.02, 0.02, axisLength, 16);
+            const cylinderGeometry = new THREE.CylinderGeometry(0.02, 0.02, 1, 16);
+
             const arrow = new THREE.Mesh(coneGeometry, material);
             const line = new THREE.Mesh(cylinderGeometry, material);
 
-            line.position.y = axisLength / 2;
-            arrow.position.y = axisLength;
-            
-            if (dir === 'x') {
-                arrow.rotation.z = -Math.PI / 2;
-                line.rotation.z = -Math.PI / 2;
-            } else if (dir === 'z') {
-                arrow.rotation.x = Math.PI / 2;
-                line.rotation.x = Math.PI / 2;
-            }
+            line.position.y = 0.5;
+            arrow.position.y = 1;
 
             const arrowGroup = new THREE.Group();
             arrowGroup.add(line);
             arrowGroup.add(arrow);
+
+            switch (direction) {
+                case 'x':
+                    arrowGroup.rotation.z = -Math.PI / 2;
+                    break;
+                case 'z':
+                    arrowGroup.rotation.x = Math.PI / 2;
+                    break;
+                default:
+                    break;
+            }
+
             return arrowGroup;
         };
 
-        const xArrow = createArrow(0xff0000, 'x');
-        const yArrow = createArrow(0x00ff00, 'y');
-        const zArrow = createArrow(0x0000ff, 'z');
+        const xArrow = createArrow(0xff0000, 'x'); // Red for X-axis
+        const yArrow = createArrow(0x00ff00, 'y'); // Green for Y-axis
+        const zArrow = createArrow(0x0000ff, 'z'); // Blue for Z-axis
 
         const axisHelper = new THREE.Group();
         axisHelper.add(xArrow);

@@ -1,4 +1,4 @@
-# threejs-function-grapher
+# function-grapher
 - For the unit 7 Programming Assignment, we will implement a function grapher. Essentially you must create a program that can plot a function that is in the form:
  z = f(x,y)
 

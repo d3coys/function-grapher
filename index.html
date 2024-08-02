@@ -10,8 +10,9 @@
 </head>
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
-<script>
+<script type="module">
+    import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
+
     // Create the scene
     var scene = new THREE.Scene();
 
@@ -64,7 +65,7 @@
     createMesh();
 
     // Add controls
-    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    var controls = new OrbitControls(camera, renderer.domElement);
 
     // Render loop
     function animate() {

@@ -181,6 +181,9 @@
     // Function to graph a given function
     function graphFunction(fun) {
         createParametricGeometry(fun);
+        if (fun === hyperbolicParaboloidFunction) {
+            mesh.rotation.x = Math.PI / 2; // Rotate the hyperbolic paraboloid 90 degrees around the X-axis
+        }
     }
 
     // Animation loop to render the scene

@@ -1,95 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Function Grapher</title>
-  <style>
-    body { margin: 0; }
-    canvas { display: block; }
-    #container { background: #ffffff; width: 100%; height: 100%; }
-  </style>
+    <meta name="description" content="CS4406 Computer Graphics - Assignment Unit 7" />
+    <meta charset="utf-8" />
+    <title>CS4406 Computer Graphics - Assignment Unit 7</title>
+    <style>
+        #container {
+            background: #ffffff;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
 <div id="container"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://threejs.org/build/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 
 <script type="text/javascript">
-  // Set the scene size
-  var WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
+    // set the scene size
+    var WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
 
-  // Set some camera attributes
-  var VIEW_ANGLE = 45, ASPECT = WIDTH / HEIGHT, NEAR = 1, FAR = 1000;
+    var VIEW_ANGLE = 45, ASPECT = WIDTH / HEIGHT, NEAR = 1, FAR = 1000;
 
-  // Get the DOM element to attach to
-  var $container = $('#container');
+    var $container = $('#container');
 
-  var renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(WIDTH, HEIGHT);
-  $container.append(renderer.domElement);
+    var renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(WIDTH, HEIGHT);
+    $container.append(renderer.domElement);
 
-  var scene = new THREE.Scene();
-  scene.background = new THREE.Color('gray');
+    var scene = new THREE.Scene();
+    scene.background = new THREE.Color('gray');
 
-  var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-  camera.position.set(3, 3, 5);
-  scene.add(camera);
+    var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+    camera.position.set(3, 3, 5);
+    scene.add(camera);
 
-  var controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 0, 0);
-  controls.update();
-
-  // Add grid helper
-  var gridHelper = new THREE.GridHelper(10, 10);
-  scene.add(gridHelper);
-
-  // Add axis helper
-  var axesHelper = new THREE.AxesHelper(5);
-  scene.add(axesHelper);
-
-  // Generate vertices and colors
-  function generateVertices() {
-    var vertices = [];
-    var colors = [];
-    for (var x = -1; x <= 1; x += 0.1) {
-      for (var y = -1; y <= 1; y += 0.1) {
-        var z = Math.pow(x, 3) - Math.pow(y, 3); // Example function
-        vertices.push(x, y, z);
-        colors.push((x + 1) / 2, (y + 1) / 2, (z + 1) / 2);
-      }
-    }
-    return { vertices: vertices, colors: colors };
-  }
-
-  // Create the geometry and mesh
-  function createMesh() {
-    var data = generateVertices();
-    var geometry = new THREE.BufferGeometry();
-    var vertices = new Float32Array(data.vertices);
-    var colors = new Float32Array(data.colors);
-    
-    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-    var material = new THREE.MeshBasicMaterial({ vertexColors: true, wireframe: true });
-    var mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-  }
-
-  createMesh();
-
-  // Add ambient light
-  var light = new THREE.AmbientLight(0x404040); // Soft white light
-  scene.add(light);
-
-  function animate() {
-    requestAnimationFrame(animate);
+    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 0, 0);
     controls.update();
-    renderer.render(scene, camera);
-  }
 
-  animate();
+    // Add grid helper
+    var gridHelper = new THREE.GridHelper(10, 10);
+    scene.add(gridHelper);
+
+    // Add axis helper
+    var axesHelper = new THREE.AxesHelper(5);
+    scene.add(axesHelper);
+
+    // Generate vertices and colors
+    function generateVertices() {
+        var vertices = [];
+        var colors = [];
+        for (var x = -1; x <= 1; x += 0.1) {
+            for (var y = -1; y <= 1; y += 0.1) {
+                var z = Math.pow(x, 3) - Math.pow(y, 3); // Example function
+                vertices.push(x, y, z);
+                colors.push((x + 1) / 2, (y + 1) / 2, (z + 1) / 2);
+            }
+        }
+        return { vertices: vertices, colors: colors };
+    }
+
+    // Create the geometry and mesh
+    function createMesh() {
+        var data = generateVertices();
+        var geometry = new THREE.BufferGeometry();
+        var vertices = new Float32Array(data.vertices);
+        var colors = new Float32Array(data.colors);
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        var material = new THREE.MeshBasicMaterial({ vertexColors: true, wireframe: true });
+        var mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+    }
+
+    createMesh();
+
+    // Add ambient light
+    var light = new THREE.AmbientLight(0x404040); // Soft white light
+    scene.add(light);
+
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+
+    animate();
 </script>
 </body>
 </html>

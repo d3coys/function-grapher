@@ -22,10 +22,10 @@
         }
         #axisHelperContainer {
             position: absolute;
-            top: 20%;
-            left: 20%;
-            width: 100px;
-            height: 100px;
+            top: 10px;
+            left: 10px;
+            width: 150px;
+            height: 150px;
         }
     </style>
 </head>
@@ -117,7 +117,7 @@
     // Initialize the axis helper
     function initAxisHelper() {
         axisRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        axisRenderer.setSize(100, 100);
+        axisRenderer.setSize(150, 150);
         document.getElementById('axisHelperContainer').appendChild(axisRenderer.domElement);
 
         axisScene = new THREE.Scene();

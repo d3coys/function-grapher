@@ -20,6 +20,13 @@
             display: block;
             margin-top: 10px;
         }
+        #axisHelperContainer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 150px;
+            height: 150px;
+        }
     </style>
 </head>
 <body>
@@ -29,12 +36,14 @@
     <button onclick="graphFunction(hyperbolicParaboloidFunction)">Hyperbolic Paraboloid</button>
     <span id="click-here">Click here</span>
 </div>
+<div id="axisHelperContainer"></div>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
     let scene, camera, renderer, controls, mesh;
+    let axisScene, axisCamera, axisRenderer;
 
-    // Initialize the scene
+    // Initialize the main scene
     function init() {
         const WIDTH = window.innerWidth;
         const HEIGHT = window.innerHeight;
@@ -98,15 +107,35 @@
 
         scene.add(axisHelper);
 
-        // Create another axis helper for the top left corner
-        const axisHelperTopLeft = axisHelper.clone();
-        axisHelperTopLeft.position.set(-1, 1, -1);
-        scene.add(axisHelperTopLeft);
-
         const ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
 
+        initAxisHelper();
         animate();
+    }
+
+    // Initialize the axis helper
+    function initAxisHelper() {
+        axisRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        axisRenderer.setSize(150, 150);
+        document.getElementById('axisHelperContainer').appendChild(axisRenderer.domElement);
+
+        axisScene = new THREE.Scene();
+
+        axisCamera = new THREE.PerspectiveCamera(50, 1, 0.1, 10);
+        axisCamera.up = camera.up; // sync the axis helper camera with the main camera
+        axisCamera.position.set(0, 0, 2);
+
+        const xArrow = createArrow(0xff0000, 'x');
+        const yArrow = createArrow(0x00ff00, 'y');
+        const zArrow = createArrow(0x0000ff, 'z');
+
+        const axisHelper = new THREE.Group();
+        axisHelper.add(xArrow);
+        axisHelper.add(yArrow);
+        axisHelper.add(zArrow);
+
+        axisScene.add(axisHelper);
     }
 
     // Function to create parametric geometry and color it
@@ -159,6 +188,16 @@
         requestAnimationFrame(animate);
         controls.update();
         renderer.render(scene, camera);
+        renderAxisHelper();
+    }
+
+    // Render the axis helper
+    function renderAxisHelper() {
+        axisCamera.position.copy(camera.position);
+        axisCamera.position.sub(controls.target); // remove the target offset
+        axisCamera.position.setLength(2);
+        axisCamera.lookAt(axisScene.position);
+        axisRenderer.render(axisScene, axisCamera);
     }
 
     init();

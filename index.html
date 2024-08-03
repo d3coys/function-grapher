@@ -82,26 +82,26 @@
     function init() {
         const WIDTH = window.innerWidth;
         const HEIGHT = window.innerHeight;
-
+         // Create and set up the renderer
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(WIDTH, HEIGHT);
         document.getElementById('container').appendChild(renderer.domElement);
-
+        // Create the scene
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0xb0b0b0); // Set background color
-
+        // Set up the camera with a perspective view
         camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 1000);
         camera.position.set(2, 2, 3); // Position camera for a better view angle
         scene.add(camera);
-
+        // Add orbit controls for interactive manipulation
         controls = new THREE.OrbitControls(camera, renderer.domElement); // Add mouse controls
         controls.target.set(0, 0, 0);
         controls.update();
-
+        // Add a grid helper to the scene for reference
         const gridHelper = new THREE.GridHelper(10, 10); // Add grid helper
         scene.add(gridHelper);
 
-        // Create axis arrows
+        // Create and add axis arrows to the scene
         const xArrow = createArrow(0xff0000, 'x'); // Red for X-axis
         const yArrow = createArrow(0x0000ff, 'y'); // Blue for Y-axis
         const zArrow = createArrow(0x00ff00, 'z'); // Green for Z-axis
@@ -112,17 +112,17 @@
         axisHelper.add(zArrow);
 
         scene.add(axisHelper);
-        // Add a plane at the origin
+        // Add a plane at the origin to the scene
         const planeGeometry = new THREE.PlaneGeometry(10, 10);
         const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide, wireframe: true });
         const plane = new THREE.Mesh(planeGeometry, planeMaterial);
         plane.rotation.x = Math.PI / 2; // Rotate to be perpendicular to Y-axis
         scene.add(plane);
-
-        const ambientLight = new THREE.AmbientLight(0x404040); // Add ambient light
+        // Add ambient light to the scene
+        const ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
 
-        initAxisHelper(); // Initialize the small axis helper
+        initAxisHelper(); // Initialize the small axis helper in the top-left corner
         animate(); // Start animation loop
     }
     /**
@@ -134,11 +134,11 @@
         document.getElementById('axisHelperContainer').appendChild(axisRenderer.domElement);
 
         axisScene = new THREE.Scene();
-
+        // Set up the axis helper camera
         axisCamera = new THREE.PerspectiveCamera(50, 1, 0.1, 10);
         axisCamera.up = camera.up; // Sync the axis helper camera with the main camera
         axisCamera.position.set(0, 0, 2);
-
+        // Create and add axis arrows to the axis helper
         const xArrow = createArrow(0xff0000, 'x'); // Red for X-axis
         const yArrow = createArrow(0x0000ff, 'y'); // Blue for Y-axis
         const zArrow = createArrow(0x00ff00, 'z'); // Green for Z-axis
@@ -160,7 +160,7 @@
         const stacks = 100; // Number of horizontal segments
         const geometry = new THREE.ParametricBufferGeometry(fun, slices, stacks);
         const colors = new Float32Array(geometry.attributes.position.count * 3);
-
+        // Apply colors based on vertex positions
         for (let i = 0; i < geometry.attributes.position.count; i++) {
             const x = geometry.attributes.position.getX(i);
             const y = geometry.attributes.position.getY(i);
@@ -172,7 +172,7 @@
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
         const material = new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide });
         if (mesh) {
-            scene.remove(mesh); // Remove previous mesh if exists
+            scene.remove(mesh); // Remove previous mesh if it exists and add the new one
         }
         mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh); // Add new mesh to the scene

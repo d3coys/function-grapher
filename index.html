@@ -166,8 +166,8 @@
             const y = geometry.attributes.position.getY(i);
             const z = geometry.attributes.position.getZ(i);
             const color = new THREE.Color(
-                (x + 1) / 2, // Red channel
-                (z + 1) / 2, // Green channel
+                (z + 1) / 2, // Red channel
+                (x + 1) / 2, // Green channel
                 (y + 1) / 2 // Blue channel
             );
             colors.set([color.r, color.g, color.b], i * 3);

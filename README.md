@@ -33,14 +33,9 @@ for (x=Min_x; x<=Max_x; x+=.01)  { for(y=Min_y; y<=Max_y; y+= .01)  { z 
 
 Grading Criteria:
 
-1. The assignment should be demonstrate the ability to graph a given function 
-
-2. The assignment should include one of the specified formulas or does it allow the user to enter the formula
-
-3. User should be able to rotate and scale the graphed function
-
-4. An Axis helper should be included in the scene (the object that indicates the x, y, and z dimensions)
-
-5. A plane (either solid or wireframe) should be perpendicular to the object at the origin included
-
-6. The JavaScript / Three.js code should be well documented 
+Does the assignment demonstrate the ability to graph a given function? (Yes/No)
+Does the assignment include one of the specified formulas or does it allow the user to enter the formula? (Yes/No)
+Can the user rotate and scale the graphed function? (Yes/No)
+Was an Axis helper included in the scene (the object that indicates the x, y, and z dimensions)? (Yes/No)
+Was a plane (either solid or wireframe) perpendicular to the object at the origin included? (Yes/No)
+Was the JavaScript / Three.js code well documented (Scale of 1-4 where 1 is no comments and 4 is comprehensive comments)
